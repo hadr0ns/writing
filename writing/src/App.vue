@@ -10,7 +10,7 @@
 			</div>
 		</div>
 		<div class="content">
-			<router-view/>
+			<router-view />
 		</div>
 		<div class="footer">
 			<a href ="https://github.com/hadr0ns/writing">GitHub</a>
