@@ -11,75 +11,67 @@
 			</div>
 		</div>
 		<div class="resources">
-			<table>
-				<tr>
-					<th>Name</th>
-					<th>Type</th>
-					<th>Link</th>
-					<th>Delete</th>
-				</tr>
-				<div class="resource" v-for="resource in resources" :key="resource.id">
-					<tr>
-						<th>{{resource.name}}</th>
-						<th>{{resource.type}}</th>
-						<th>{{resource.link}}</th>
-						<th><button @click="deleteResource(resource)">Delete</button></th>
-					</tr>
-				</div>
-			</table>
+			<div class="resource" v-for="resource in resources" :key="resource.id">
+				<h1>{{resource.name}}</h1>
+				<p>{{resource.type}}</p>
+				<p><a :href=resource.link>Link</a></p>
+				<button @click="deleteResource(resource)">Delete</button>
+			</div>
+
 		</div>
 	</div>
 </template>
 
 <script>
-	import axios from 'axios';
-	export default {
-		data() {
-			return {
-				resources: [],
-				name: "",
-				type: "",
-				link: "",
-				//selectResource: null,
+import axios from 'axios';
+export default {
+	data() {
+		return {
+			resources: [],
+			name: "",
+			type: "",
+			link: "",
+			//selectResource: null,
+		}
+	},
+	created() {
+		this.getResources();
+	},
+	methods: {
+		async add() {
+			try {
+				await axios.post('/api/resource', {
+					name: this.name,
+					type: this.type,
+					link: this.link
+				});
+				this.getResources();
+				return true;
+			} catch (error) {
+				//console.log(error);
 			}
 		},
-		created() {
-			this.getResources();
-		},
-		methods: {
-			async add() {
-				try {
-					await axios.post('/api/resource', {
-						name: this.name,
-						description: this.description,
-						link: this.link
-					});
-					return true;
-				} catch (error) {
-					console.log(error);
-				}
-			},
 
-			async deleteResource(resource) {
-				try {
-					await axios.delete("/api/resource/" + resource._id);
-					this.getResources();
-					return true;
-				} catch (error) {
-					console.log(error);
-				}
-			},
-			async getResources() {
-				try {
-					let response = await axios.get("/api/resource");
-					this.resources = response.data;
-					return true;
-				} catch (error) {
-					console.log(error);
-				}
+		async deleteResource(resource) {
+			try {
+				await axios.delete("/api/resource/" + resource._id);
+				this.getResources();
+				return true;
+			} catch (error) {
+				//console.log(error);
+			}
+		},
+		async getResources() {
+			try {
+				let response = await axios.get("/api/resource");
+				this.resources = response.data;
+				return true;
+			} catch (error) {
+				//console.log(error);
 			}
 		}
 	}
+}
 </script>
 
 <style scoped>

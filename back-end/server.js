@@ -17,12 +17,12 @@ mongoose.connect('mongodb://localhost:27017/writing', {
 
 
 const assignmentSchema = new mongoose.Schema({
-	studentName: String,
+	//studentName: String,
 	type: String,
-	format: String,
-	dueDate: String,
-	register: String,
-	issue: String,
+	//format: String,
+	//dueDate: String,
+	//register: String,
+	concern: String,
 	//add more characteristics
 
 });
@@ -41,11 +41,8 @@ const Resource = mongoose.model('Resource', resourceSchema);
 //make new assignment
 app.post('/api/assignment', async (req, res) => {
 	const assignment = new Assignment ({
-		studentName: req.body.studentName,
 		type: req.body.type,
-		format: req.body.format,
-		register: req.body.register,
-		issue: req.body.issue
+		concern: req.body.concern,
 	});
 	try {
 		await assignment.save();
@@ -99,6 +96,16 @@ app.get('/api/resource', async (req, res) => {
 	try {
 		let resources = await Resource.find();
 		res.send(resources);
+	} catch(error) {
+		console.log(error);
+		res.sendStatus(500);
+	}
+});
+
+app.get('/api/assignment', async (req, res) => {
+	try {
+		let assignments = await Assignment.find();
+		res.send(assignments);
 	} catch(error) {
 		console.log(error);
 		res.sendStatus(500);
